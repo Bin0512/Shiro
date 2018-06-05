@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+        xmlns:aop="http://www.springframework.org/schema/aop"  
+        xmlns:p="http://www.springframework.org/schema/p"  
+        xmlns:tx="http://www.springframework.org/schema/tx"  
+        xmlns:context="http://www.springframework.org/schema/context"  
+        xsi:schemaLocation="   
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd   
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd   
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context 
+            http://www.springframework.org/schema/context/spring-context.xsd">
+            
+            <bean id = "shiroFilter" class = "org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+            	<property name="securityManager" ref = "securityManager" />
+            	<property name="loginUrl" value = "login.jsp" />
+            	<property name="unauthorizedUrl" value = "failure.jsp" />
+            	<property name="filterChainDefinitions">
+            		<value>
+            			/login.jsp = anon
+            			/subLogin = anon
+            			/* = authc
+            		</value>
+            	</property>
+            </bean>
+            
+            <bean id = "securityManager" class = "org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+            	<property name="realm" ref = "realm"></property>
+            </bean>
+            
+            <bean id = "realm" class = "com.imooc.shiro.realm.CustomRealm">
+            	<property name="credentialsMatcher" ref = "credentialsMatcher" />
+            </bean>
+            
+            <bean id = "credentialsMatcher" class = "org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+            	<property name="hashAlgorithmName" value = "md5" />
+            	<property name="hashIterations" value = "1" />
+            </bean>
+</beans>
